@@ -1,0 +1,12 @@
+{
+  "transformers": [
+    {
+      "transformerName": "ocr",
+      "supportedSourceAndTargetList": [
+        {"sourceMediaType": "application/pdf", "targetMediaType": "application/pdf"}
+      ],
+      "transformOptions": [
+      ]
+    }
+  ]
+}
