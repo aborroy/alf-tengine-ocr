@@ -1,4 +1,4 @@
-FROM jbarlow83/ocrmypdf:v9.2.0
+FROM jbarlow83/ocrmypdf
 
 # Install OpenJDK 11
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
