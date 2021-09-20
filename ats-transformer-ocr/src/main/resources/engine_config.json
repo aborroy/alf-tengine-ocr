@@ -3,9 +3,13 @@
     {
       "transformerName": "ocr",
       "supportedSourceAndTargetList": [
-        {"sourceMediaType": "application/pdf", "targetMediaType": "application/pdf"}
-      ],
-      "transformOptions": [
+        {"sourceMediaType": "image/pdf", "targetMediaType": "application/pdf"}
+      ]
+    },
+    {
+      "transformerName": "imagePdfText",
+      "supportedSourceAndTargetList": [
+        {"sourceMediaType": "image/pdf", "targetMediaType": "plain/text" }
       ]
     }
   ]

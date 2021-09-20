@@ -38,6 +38,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
 {
+    
+    private String transformName;
 
     @Autowired
     public PdfToOcrdPdfTransformerExecutor()
@@ -47,12 +49,19 @@ public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
     @Override
     public void call(File sourceFile, File targetFile, String... args) throws TransformException
     {
-
+        
+        transformName = args[0];
+        
+        String command = String.format("/usr/local/bin/ocrmypdf " + sourceFile.getPath() + " " + targetFile.getPath());
+        
         try
         {
 
-            Process process = Runtime.getRuntime().exec(
-                    String.format("/usr/local/bin/ocrmypdf " + sourceFile.getPath() + " " + targetFile.getPath()));
+            if (transformName.equals("imagePdfText"))
+            {
+                command = command + ".temp --sidecar " + targetFile.getPath();
+            }
+            Process process = Runtime.getRuntime().exec(command);
             StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream(), System.out::println);
             Executors.newSingleThreadExecutor().submit(streamGobbler);
             process.waitFor();
