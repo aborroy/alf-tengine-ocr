@@ -128,3 +128,7 @@ transform-ocr:
       JAVA_OPTS: "-XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
       OCRMYPDF_ARGUMENTS: "--skip-text -l eng"
 ```
+
+## Additional contributors
+
+* Thanks to [dgradecak](https://github.com/dgradecak) for the `embed-metadata` action approach: https://github.com/aborroy/alf-tengine-ocr/pull/2
