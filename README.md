@@ -1,53 +1,101 @@
 ## Alfresco Transformer from PDF to OCRd PDF
 
-This project includes a sample Transformer for Alfresco from PDF to OCRd PDF to be used with ACS Community 6.2+
+This project includes a simple Transformer for Alfresco from PDF to OCRd PDF to be used with **ACS Community 7.0+**
 
-The Transformer `ats-transformer-ocr` uses the new Local Transform API, that allows to register a Spring Boot Application as a local transformation service.
+>> OCR Transformation is performed by [ocrmypdf](https://ocrmypdf.readthedocs.io/en/latest/), a wrapper of [Tesseract](https://github.com/tesseract-ocr/tesseract) that includes additional features in order to improve the accuracy of the process.
 
-## Build Docker Image for ATS Transformer Markdown
+The Transformer `ats-transformer-ocr` uses the new Alfresco Local Transform API, that allows to register a Spring Boot Application as a local transformation service.
 
-Building the ATS Transformer Markdown Docker Image is required before running the Docker Compose template provided.
+The folder `embed-metadata-action` includes an Alfresco Repository Addon that enables the action `embed-metadata` in Folder Rule feature.
+
+## Local testing
+
+### Build Docker Image for Alfresco OCR Transformer
+
+Building the Alfresco OCR Transformer Docker Image is required before running the Docker Compose template provided.
 
 ```
 $ cd ats-transformer-ocr
 
 $ mvn clean package
-
-$ docker build . -t alfresco/alfresco-transformer-ocr
 ```
 
-## Starting
+Maven will create a Docker Image named `alfresco/tengine-ocr:latest`
+
+### Starting
 
 ```
-$ docker run -p 8090:8090 -t alfresco/alfresco-transformer-ocr:latest
+$ docker run -p 8090:8090 -t alfresco/tengine-ocr:latest
 ```
 
-## Testing
+### Testing
 
 A sample web page has been created in order to test the transformer is working:
 
 http://localhost:8090
 
-## Alfresco Action integration
-in order to use Alfresco Share Rules and Actions you need to enable the "embed-metadata" action. Once enabled on the repoistory side it would appear in Share under rule's actions
+
+## Deployment with ACS Stack
+
+### Obtaining Repository Addon to enable Embed Metadata Action
+
+Before deploying Alfresco OCR Transformer, `embed-metadata-action` Repository Addon should be built.
+
 ```
-    <bean id="embed-metadata" class="org.alfresco.repo.action.executer.ContentMetadataEmbedder" parent="action-executer">
-        <property name="nodeService">
-            <ref bean="NodeService" />
-        </property>
-        <property name="contentService">
-            <ref bean="ContentService" />
-        </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService" />
-        </property>
-        <property name="metadataExtracterRegistry">
-            <ref bean="metadataExtracterRegistry" />
-        </property>
-        <property name="applicableTypes">
-            <list>
-                <value>{http://www.alfresco.org/model/content/1.0}content</value>
-            </list>
-        </property>        
-    </bean>
+$ cd embed-metadata-action
+
+$ mvn clean package
+
+$ ls target/embed-metadata-action-1.0.0.jar
+target/embed-metadata-action-1.0.0.jar
 ```
+
+Alternatively `embed-metadata-action-1.0.0.jar` can be download from [Releases](https://github.com/aborroy/alf-tengine-ocr/releases/download/1.0.0/embed-metadata-action-1.0.0.jar)
+
+### Adding Alfresco OCR Transformer to Docker Compose
+
+Use some of the available alternatives to deploy `embed-metadata-action-1.0.0.jar` in alfresco service, like adding the JAR to `alfresco/modules/jar` folder when using [Alfresco Docker Installer](https://github.com/alfresco/alfresco-docker-installer) tool.
+
+Review that the following configuration is applied to `docker-compose.yml` file.
+
+```
+services:
+    alfresco:
+        environment:
+            JAVA_OPTS : "
+                -DlocalTransform.core-aio.url=http://transform-core-aio:8090/
+                -DlocalTransform.ocr.url=http://transform-ocr:8090/
+            "
+
+    transform-core-aio:
+        image: alfresco/alfresco-transform-core-aio:2.3.10
+        mem_limit: 1536m
+        environment:
+            JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+
+    transform-ocr:
+        image: alfresco/tengine-ocr:latest
+        mem_limit: 1536m
+        environment:
+            JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+```
+
+>> Remember that you need to build Docker Image for `alfresco/tengine-ocr` before running this composition
+
+Start ACS Stack from folder containing `docker-compose.yml` file.
+
+```
+$ docker-compose up --build --force-recreate
+```
+
+### Defining the OCR Rule in Alfresco Share
+
+Use your browser to access to Alfresco Share App (by default available in http://localhost:8080/share/)
+
+Create a folder and add following rule (`Manage Rules` folder option):
+
+* When: Items are created or enter this folder, Items are updated
+* If all criteria are met: Mimetype is 'Adobe PDF Document'
+* Perform Action: Embed properties as metadata in content
+
+From that point, every PDF File uploaded to the folder will be OCRd. Original version for the PDF file will remain as 1.0 version, while the one with text layer on it will be labeled as 1.1 version. 
