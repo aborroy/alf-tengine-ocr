@@ -31,19 +31,17 @@ import java.util.concurrent.Executors;
 
 import org.alfresco.transform.exceptions.TransformException;
 import org.alfresco.transformer.command.StreamGobbler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
 {
-
-    @Autowired
-    public PdfToOcrdPdfTransformerExecutor()
-    {
-    }
-
+	@Override
+	public String getTransformerId() {
+		return "ocr";
+	}
+	
     @Override
     public void call(File sourceFile, File targetFile, String... args) throws TransformException
     {
@@ -76,5 +74,4 @@ public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
     {
         return e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
     }
-
 }

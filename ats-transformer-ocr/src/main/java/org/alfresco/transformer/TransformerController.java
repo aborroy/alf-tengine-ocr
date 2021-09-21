@@ -38,6 +38,7 @@ import org.alfresco.transformer.executors.PdfToOcrdPdfTransformerExecutor;
 import org.alfresco.transformer.fs.FileManager;
 import org.alfresco.transformer.logging.LogEntry;
 import org.alfresco.transformer.probes.ProbeTestTransform;
+import org.alfresco.transformer.transformers.OcrTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,17 +75,23 @@ public class TransformerController extends AbstractTransformerController {
 	
     private static final Logger logger = LoggerFactory.getLogger(TransformerController.class);
 
+    private final PdfToOcrdPdfTransformerExecutor javaExecutor;
+    private final OcrTransformer ocrTransfromer;
+    
     @Autowired
-    private PdfToOcrdPdfTransformerExecutor javaExecutor;
+    public TransformerController(PdfToOcrdPdfTransformerExecutor javaExecutor, OcrTransformer ocrTransfromer) {
+		this.javaExecutor = javaExecutor;
+		this.ocrTransfromer = ocrTransfromer;
+	}
 
-    @Override
+	@Override
     public String getTransformerName() {
         return "ocr";
     }
 
     @Override
     public String version() {
-        return "1.0";
+        return "1.1";
     }
 
     @Override
@@ -98,66 +105,16 @@ public class TransformerController extends AbstractTransformerController {
             }
         };
     }
-
-    @PostMapping(value = "/transform", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Resource> transform(HttpServletRequest request,
-	        @RequestParam("file") final MultipartFile sourceMultipartFile,
-	        @RequestParam("sourceMimetype") final String sourceMimetype,
-	        @RequestParam("targetExtension") final String targetExtension,
-	        @RequestParam("targetMimetype") final String targetMimetype,
-	
-	        @RequestParam(value = "timeout", required = false) final Long timeout,
-	        @RequestParam(value = "testDelay", required = false) final Long testDelay) {
-    	
-    	// We know the target extension and MIME type
-    	// Let's make a random unique filename for temporary storage to hand back to the ATS Transform Router
-        final String targetFilename = FileManager.createTargetFileName(sourceMultipartFile.getOriginalFilename(), targetExtension);
-
-        // Inform the probe of pending transformation
-        // This allows ATS to track usage statistics
-        this.getProbeTestTransform().incrementTransformerCount();
-
-        // Using parameters, get Java IO File references all squared away
-        // This means downloading the source file to the local file system
-        // It would be better if you stream straight from the source and not make a copy
-        final File sourceFile = FileManager.createSourceFile(request, sourceMultipartFile);
-        final File targetFile = FileManager.createTargetFile(request, targetFilename);
-        // Both files are deleted by TransformInterceptor.afterCompletion
-
-        // Store all the extra parameters in a Map
-        final Map<String, String> transformOptions = this.createTransformOptions();
-
-        // Make a decision on what sub-transformer or algorithm to use for the transformation
-        final String transform = this.getTransformerName(sourceFile, sourceMimetype, targetMimetype, transformOptions);
-
-        // Execute the transformation
-        this.javaExecutor.call(sourceFile, targetFile, transform, targetMimetype);
-
-        // Prepare the response
-        final ResponseEntity<Resource> body = FileManager.createAttachment(targetFilename, targetFile);
-
-        // Some logging overhead
-        LogEntry.setTargetSize(targetFile.length());
-        long time = LogEntry.setStatusCodeAndMessage(OK.value(), "Success");
-        time += LogEntry.addDelay(testDelay);
-        
-        // Inform the probe of the time taken for the transformation
-        // This allows ATS to track duration statistics
-        this.getProbeTestTransform().recordTransformTime(time);
-
-        return body;
-    }
-
-    @Override
-    public void processTransform(final File sourceFile, final File targetFile,
-	        final String sourceMimetype, final String targetMimetype,
-	        final Map<String, String> transformOptions, final Long timeout) {
-        logger.debug("Processing request with: sourceFile '{}', targetFile '{}', transformOptions" +
-                     " '{}', timeout {} ms", sourceFile, targetFile, transformOptions, timeout);
-
-        final String transform = this.getTransformerName(sourceFile, sourceMimetype, targetMimetype, transformOptions);
-
-        this.javaExecutor.call(sourceFile, targetFile, transform, targetMimetype);
-    }
     
+    @Override
+    public void transformImpl(String transformName, String sourceMimetype, String targetMimetype,
+    		Map<String, String> transformOptions, File sourceFile, File targetFile) {
+
+    	if("ocrembedded".equals(transformName)) {
+    	  ocrTransfromer.embedMetadata(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
+		} else {
+          // Execute the transformation
+          this.javaExecutor.call(sourceFile, targetFile, transformName, targetMimetype);
+		}
+    }
 }
