@@ -11,11 +11,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.8.RELEASE</version>
+		<version>2.5.4</version>
 	</parent>
 
 	<properties>
-		<alfresco.transformer.base.version>2.1.0</alfresco.transformer.base.version>
+		<alfresco.transformer.base.version>2.5.4-SNAPSHOT</alfresco.transformer.base.version>
 	</properties>
 
 	<dependencies>
