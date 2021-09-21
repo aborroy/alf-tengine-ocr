@@ -26,28 +26,14 @@
  */
 package org.alfresco.transformer;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
 import java.io.File;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.alfresco.transformer.executors.PdfToOcrdPdfTransformerExecutor;
-import org.alfresco.transformer.fs.FileManager;
-import org.alfresco.transformer.logging.LogEntry;
 import org.alfresco.transformer.probes.ProbeTestTransform;
 import org.alfresco.transformer.transformers.OcrTransformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controller for a transformer.
@@ -73,8 +59,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class TransformerController extends AbstractTransformerController {
 	
-    private static final Logger logger = LoggerFactory.getLogger(TransformerController.class);
-
     private final PdfToOcrdPdfTransformerExecutor javaExecutor;
     private final OcrTransformer ocrTransfromer;
     
@@ -96,7 +80,6 @@ public class TransformerController extends AbstractTransformerController {
 
     @Override
     public ProbeTestTransform getProbeTestTransform() {
-        // See the Javadoc on this method and Probes.md for the choice of these values.
         return new ProbeTestTransform(this, "quick.pdf", "quick2.pdf",
         		60, 16, 400, 10240, 60 * 30 + 1, 60 * 15 + 20) {
             @Override
@@ -110,11 +93,10 @@ public class TransformerController extends AbstractTransformerController {
     public void transformImpl(String transformName, String sourceMimetype, String targetMimetype,
     		Map<String, String> transformOptions, File sourceFile, File targetFile) {
 
-    	if("ocrembedded".equals(transformName)) {
+    	if ("ocrembedded".equals(transformName)) {
     	  ocrTransfromer.embedMetadata(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
 		} else {
-          // Execute the transformation
-          this.javaExecutor.call(sourceFile, targetFile, transformName, targetMimetype);
+          javaExecutor.call(sourceFile, targetFile, transformName, targetMimetype);
 		}
     }
 }

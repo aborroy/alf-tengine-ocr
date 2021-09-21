@@ -31,12 +31,23 @@ import java.util.concurrent.Executors;
 
 import org.alfresco.transform.exceptions.TransformException;
 import org.alfresco.transformer.command.StreamGobbler;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+@Configuration
 @Component
 public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
 {
+    
+    @Value( "${ocrmypdf.path}" )
+    private String command;
+    
+    @Value( "${ocrmypdf.arguments}" )
+    private String arguments;
+    
+    
 	@Override
 	public String getTransformerId() {
 		return "ocr";
@@ -45,12 +56,16 @@ public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
     @Override
     public void call(File sourceFile, File targetFile, String... args) throws TransformException
     {
-
+        
         try
         {
 
             Process process = Runtime.getRuntime().exec(
-                    String.format("/usr/bin/ocrmypdf " + sourceFile.getPath() + " " + targetFile.getPath()));
+                    String.format("%s %s %s %s", 
+                            command, 
+                            arguments, 
+                            sourceFile.getPath(), 
+                            targetFile.getPath()));
             StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream(), System.out::println);
             Executors.newSingleThreadExecutor().submit(streamGobbler);
             process.waitFor();

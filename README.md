@@ -25,7 +25,7 @@ Maven will create a Docker Image named `alfresco/tengine-ocr:latest`
 ### Starting
 
 ```
-$ docker run -p 8090:8090 -t alfresco/tengine-ocr:latest
+$ docker run -p 8090:8090 alfresco/tengine-ocr:latest
 ```
 
 ### Testing
@@ -98,4 +98,33 @@ Create a folder and add following rule (`Manage Rules` folder option):
 * If all criteria are met: Mimetype is 'Adobe PDF Document'
 * Perform Action: Embed properties as metadata in content
 
-From that point, every PDF File uploaded to the folder will be OCRd. Original version for the PDF file will remain as 1.0 version, while the one with text layer on it will be labeled as 1.1 version. 
+From that point, every PDF File uploaded to the folder will be OCRd. Original version for the PDF file will remain as 1.0 version, while the one with text layer on it will be labeled as 1.1 version.
+
+## Customizing ocrmypdf arguments
+
+By default, Alfresco OCR Transformer is providing following `ocrmypdf` configuration.
+
+```
+# Location for ocrmypdf program in Docker Container
+ocrmypdf.path=/usr/bin/ocrmypdf
+
+# Arguments for ocrmypdf invocation
+ocrmypdf.arguments=--skip-text
+```   
+
+Configuration can be changed by using Docker environment variables from command line.
+
+```
+$ docker run -p 8090:8090 -e OCRMYPDF_ARGUMENTS='--skip-text -l eng' alfresco/tengine-ocr:latest
+```
+
+Or with the equivalent notation in `docker-compose.yml`
+
+```
+transform-ocr:
+    image: alfresco/tengine-ocr:latest
+    mem_limit: 1536m
+    environment:
+      JAVA_OPTS: "-XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+      OCRMYPDF_ARGUMENTS: "--skip-text -l eng"
+```
