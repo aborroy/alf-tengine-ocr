@@ -51,7 +51,7 @@
 				<configuration>
 					<images>
 						<image>
-							<name>quay.io/alfresco/tengine-ocr:${image.tag}</name>
+							<name>alfresco/tengine-ocr:${image.tag}</name>
 						</image>
 					</images>
 				</configuration>
