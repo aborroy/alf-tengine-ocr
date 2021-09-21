@@ -29,9 +29,8 @@ package org.alfresco.transformer;
 import java.io.File;
 import java.util.Map;
 
-import org.alfresco.transformer.executors.PdfToOcrdPdfTransformerExecutor;
+import org.alfresco.transformer.executors.OcrmypdfCommandExecutor;
 import org.alfresco.transformer.probes.ProbeTestTransform;
-import org.alfresco.transformer.transformers.OcrTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -59,18 +58,16 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class TransformerController extends AbstractTransformerController {
 	
-    private final PdfToOcrdPdfTransformerExecutor javaExecutor;
-    private final OcrTransformer ocrTransfromer;
+    private final OcrmypdfCommandExecutor executor;
     
     @Autowired
-    public TransformerController(PdfToOcrdPdfTransformerExecutor javaExecutor, OcrTransformer ocrTransfromer) {
-		this.javaExecutor = javaExecutor;
-		this.ocrTransfromer = ocrTransfromer;
+    public TransformerController(OcrmypdfCommandExecutor executor) {
+		this.executor = executor;
 	}
 
 	@Override
     public String getTransformerName() {
-        return "ocr";
+        return "ocrmypdf";
     }
 
     @Override
@@ -84,7 +81,7 @@ public class TransformerController extends AbstractTransformerController {
         		60, 16, 400, 10240, 60 * 30 + 1, 60 * 15 + 20) {
             @Override
             protected void executeTransformCommand(File sourceFile, File targetFile) {
-                TransformerController.this.javaExecutor.call(sourceFile, targetFile);
+            	executor.transform(OcrmypdfCommandExecutor.ID, getTransformerName(), getTransformerName(), null, sourceFile, targetFile);
             }
         };
     }
@@ -93,10 +90,11 @@ public class TransformerController extends AbstractTransformerController {
     public void transformImpl(String transformName, String sourceMimetype, String targetMimetype,
     		Map<String, String> transformOptions, File sourceFile, File targetFile) {
 
-    	if ("ocrembedded".equals(transformName)) {
-    	  ocrTransfromer.embedMetadata(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
+    	// both methods could be just using transform but for the time being we might have to differentiate or use the metadata provided while embeding
+    	if ("ocrmypdfembedded".equals(transformName)) {
+    		executor.embedMetadata(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
 		} else {
-          javaExecutor.call(sourceFile, targetFile, transformName, targetMimetype);
+			executor.transform(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
 		}
     }
 }
