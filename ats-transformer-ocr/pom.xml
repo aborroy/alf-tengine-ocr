@@ -16,6 +16,7 @@
 
 	<properties>
 		<alfresco.transformer.base.version>2.5.4-SNAPSHOT</alfresco.transformer.base.version>
+		<image.tag>latest</image.tag>
 	</properties>
 
 	<dependencies>
@@ -39,6 +40,27 @@
 					<execution>
 						<goals>
 							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.34.1</version>
+				<configuration>
+					<images>
+						<image>
+							<name>alfresco/tengine-ocr:${image.tag}</name>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<id>build-image</id>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
 						</goals>
 					</execution>
 				</executions>

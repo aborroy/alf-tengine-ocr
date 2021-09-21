@@ -41,7 +41,7 @@ public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
 	public String getTransformerId() {
 		return "ocr";
 	}
-	
+
     @Override
     public void call(File sourceFile, File targetFile, String... args) throws TransformException
     {
@@ -50,12 +50,12 @@ public class PdfToOcrdPdfTransformerExecutor implements JavaExecutor
         {
 
             Process process = Runtime.getRuntime().exec(
-                    String.format("/usr/local/bin/ocrmypdf " + sourceFile.getPath() + " " + targetFile.getPath()));
+                    String.format("/usr/bin/ocrmypdf " + sourceFile.getPath() + " " + targetFile.getPath()));
             StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream(), System.out::println);
             Executors.newSingleThreadExecutor().submit(streamGobbler);
             process.waitFor();
 
-        } 
+        }
         catch (Exception e)
         {
             throw new TransformException(HttpStatus.INTERNAL_SERVER_ERROR.value(),

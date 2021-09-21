@@ -1,4 +1,8 @@
-FROM jbarlow83/ocrmypdf
+FROM ubuntu:latest
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y ocrmypdf
 
 # Install OpenJDK 11
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
