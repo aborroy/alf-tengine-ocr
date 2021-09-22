@@ -105,8 +105,8 @@ From that point, every PDF File uploaded to the folder will be OCRd. Original ve
 By default, Alfresco OCR Transformer is providing following `ocrmypdf` configuration.
 
 ```
-# Location for ocrmypdf program in Docker Container
-ocrmypdf.path=/usr/bin/ocrmypdf
+# Executable command for ocrmypdf program
+ocrmypdf.path=ocrmypdf
 
 # Arguments for ocrmypdf invocation
 ocrmypdf.arguments=--skip-text
