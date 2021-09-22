@@ -6,7 +6,7 @@
   },
   "transformers": [
     {
-      "transformerName": "ocr",
+      "transformerName": "ocrmypdf",
       "supportedSourceAndTargetList": [
         {"sourceMediaType": "application/pdf", "targetMediaType": "application/pdf"}
       ],
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "transformerName": "ocrembedded",
+      "transformerName": "ocrmypdfembedded",
         "supportedSourceAndTargetList": [
           {  "sourceMediaType": "application/pdf", "targetMediaType": "alfresco-metadata-embed" }
 	    ],
