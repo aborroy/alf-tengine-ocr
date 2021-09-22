@@ -40,6 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 	public static String ID = "ocrmypdf";
+	public static String EXTRA_ARGUMENTS = "--extra-arguments";
 
 	public static final String LICENCE = "This transformer uses ocrmypdf which uses the Tesseract library from Google Inc. See the license at https://github.com/tesseract-ocr/tesseract/blob/master/LICENSE";
 
@@ -91,8 +92,14 @@ public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 	public void transform(String transformName, String sourceMimetype, String targetMimetype,
 			Map<String, String> transformOptions, File sourceFile, File targetFile) {
 		Long timeout = stringToLong(transformOptions.get(TIMEOUT));
+		String extraArguments = transformOptions.get(EXTRA_ARGUMENTS);
+		
+		StringBuilder args = new StringBuilder(arguments);
+		if(extraArguments != null) {
+			args.append(" ").append(extraArguments);
+		}			
 
-		run(arguments, sourceFile, targetFile, timeout);
+		run(args.toString(), sourceFile, targetFile, timeout);
 	}
 	
 	@Override
