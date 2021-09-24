@@ -94,7 +94,7 @@ Use your browser to access to Alfresco Share App (by default available in http:/
 
 Create a folder and add following rule (`Manage Rules` folder option):
 
-* When: Items are created or enter this folder, Items are updated
+* When: Items are created or enter this folder
 * If all criteria are met: Mimetype is 'Adobe PDF Document'
 * Perform Action: Embed properties as metadata in content
 
