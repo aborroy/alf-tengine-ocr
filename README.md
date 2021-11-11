@@ -98,6 +98,8 @@ Create a folder and add following rule (`Manage Rules` folder option):
 * If all criteria are met: Mimetype is 'Adobe PDF Document'
 * Perform Action: Embed properties as metadata in content
 
+>> To limit the amount of parallel OCR processing threads, use the **Run rule in background** checkbox.
+
 From that point, every PDF File uploaded to the folder will be OCRd. Original version for the PDF file will remain as 1.0 version, while the one with text layer on it will be labeled as 1.1 version.
 
 ## Customizing ocrmypdf arguments
