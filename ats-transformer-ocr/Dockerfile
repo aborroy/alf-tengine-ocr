@@ -1,4 +1,5 @@
 FROM ubuntu:latest
+ARG languages
 
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -46,6 +47,15 @@ ENV JAVA_HOME=/opt/java/openjdk \
     PATH="/opt/java/openjdk/bin:$PATH"
 
 ENV JAVA_OPTS=""
+
+# Install additional Tesseract languages
+RUN langs=$(echo $languages | tr "," "\n"); \
+    apt-get update; \
+    for l in $langs; \
+    do \
+      sleep 10; \
+      apt-get install -y tesseract-ocr-$l; \
+    done
 
 # Set default user information
 ARG GROUP_NAME=alfresco
