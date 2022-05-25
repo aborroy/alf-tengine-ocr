@@ -52,7 +52,7 @@ target/embed-metadata-action-1.0.0.jar
 
 Alternatively `embed-metadata-action-1.0.0.jar` can be download from [Releases](https://github.com/aborroy/alf-tengine-ocr/releases/download/1.0.0/embed-metadata-action-1.0.0.jar)
 
-# Deploying Repository Addon to enable Embed Metadata Action
+### Deploying Repository Addon to enable Embed Metadata Action
 
 Use some of the available alternatives to deploy `embed-metadata-action-1.0.0.jar` in alfresco service, like adding the JAR to `alfresco/modules/jar` folder when using [Alfresco Docker Installer](https://github.com/alfresco/alfresco-docker-installer) tool.
 
