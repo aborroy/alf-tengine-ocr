@@ -1,0 +1,24 @@
+{
+  "transformOptions": {
+    "embedMetadata": [
+      { "value": { "name": "metadata" } }
+  	]
+  },
+  "transformers": [
+    {
+      "transformerName": "ocrmypdf",
+      "supportedSourceAndTargetList": [
+        {"sourceMediaType": "application/pdf", "targetMediaType": "application/pdf"}
+      ],
+      "transformOptions": [
+      ]
+    },
+    {
+      "transformerName": "ocrmypdfembedded",
+        "supportedSourceAndTargetList": [
+          {  "sourceMediaType": "application/pdf", "targetMediaType": "alfresco-metadata-embed" }
+	    ],
+	    "transformOptions": ["embedMetadata"]
+    }
+  ]
+}
