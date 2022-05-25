@@ -1,0 +1,2 @@
+queue:
+  engineRequestQueue: ocr-engine-queue
