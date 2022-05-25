@@ -52,9 +52,11 @@ target/embed-metadata-action-1.0.0.jar
 
 Alternatively `embed-metadata-action-1.0.0.jar` can be download from [Releases](https://github.com/aborroy/alf-tengine-ocr/releases/download/1.0.0/embed-metadata-action-1.0.0.jar)
 
-### Adding Alfresco OCR Transformer to Docker Compose
+# Deploying Repository Addon to enable Embed Metadata Action
 
 Use some of the available alternatives to deploy `embed-metadata-action-1.0.0.jar` in alfresco service, like adding the JAR to `alfresco/modules/jar` folder when using [Alfresco Docker Installer](https://github.com/alfresco/alfresco-docker-installer) tool.
+
+### Adding Alfresco OCR Transformer to Docker Compose (Local Transformer - HTTP) - Community Edition
 
 Review that the following configuration is applied to `docker-compose.yml` file.
 
@@ -80,6 +82,9 @@ services:
             JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
 ```
 
+* Include the `localTransform` URL for OCR Transformer in `alfresco` Docker Container, http://transform-ocr:8090/ by default
+* Declare the new `transform-ocr` Docker Container
+
 >> Remember that you need to build Docker Image for `alfresco/tengine-ocr` before running this composition
 
 Start ACS Stack from folder containing `docker-compose.yml` file.
@@ -87,6 +92,62 @@ Start ACS Stack from folder containing `docker-compose.yml` file.
 ```
 $ docker-compose up --build --force-recreate
 ```
+
+### Adding Alfresco OCR Transformer to Docker Compose (Async Transformer - ActiveMQ) - Enterprise Edition
+
+Review that the following configuration is applied to `docker-compose.yml` file.
+
+```
+services:
+    alfresco:
+        environment:
+            JAVA_OPTS : "
+              -Dlocal.transform.service.enabled=false
+              -Dtransform.service.enabled=true
+              -Dtransform.service.url=http://transform-router:8095
+              -Dsfs.url=http://shared-file-store:8099/
+            "
+
+    transform-router:
+      image: quay.io/alfresco/alfresco-transform-router:${TRANSFORM_ROUTER_TAG}
+      environment:
+        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+        ACTIVEMQ_URL: "nio://activemq:61616"
+        CORE_AIO_URL: "http://transform-core-aio:8090"
+        TRANSFORMER_URL_OCR: "http://transform-ocr:8090"
+        TRANSFORMER_QUEUE_OCR: "ocr-engine-queue"
+        FILE_STORE_URL: "http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file"
+      ports:
+        - "8095:8095"
+      links:
+        - activemq
+
+    transform-ocr:
+      image: alfresco/tengine-ocr:latest
+      mem_limit: 1536m
+      environment:
+        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+        ACTIVEMQ_URL: "nio://activemq:61616"
+        FILE_STORE_URL: "http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file"
+      ports:
+        - "8093:8090"
+      links:
+        - activemq
+
+```
+
+* Disable `local.transform` service in `alfresco` Docker Container and enable `transform` service (asynchronous)
+* Add OCR Transformer configuration to `transform-router` Docker Container: URL (http://transform-ocr:8090/ by default) and Queue Name (`ocr-engine-queue` as declared in [ats-transformer-ocr/src/main/resources/application-default.yaml](ats-transformer-ocr/src/main/resources/application-default.yaml))
+* Declare the new `transform-ocr` Docker Container using the ActiveMQ and Shared File services
+
+>> Remember that you need to build Docker Image for `alfresco/tengine-ocr` before running this composition
+
+Start ACS Stack from folder containing `docker-compose.yml` file.
+
+```
+$ docker-compose up --build --force-recreate
+```
+
 
 ### Defining the OCR Rule in Alfresco Share
 
