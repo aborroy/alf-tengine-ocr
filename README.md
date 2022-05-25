@@ -117,10 +117,6 @@ services:
         TRANSFORMER_URL_OCR: "http://transform-ocr:8090"
         TRANSFORMER_QUEUE_OCR: "ocr-engine-queue"
         FILE_STORE_URL: "http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file"
-      ports:
-        - "8095:8095"
-      links:
-        - activemq
 
     transform-ocr:
       image: alfresco/tengine-ocr:latest
@@ -129,11 +125,6 @@ services:
         JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
         ACTIVEMQ_URL: "nio://activemq:61616"
         FILE_STORE_URL: "http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file"
-      ports:
-        - "8093:8090"
-      links:
-        - activemq
-
 ```
 
 * Disable `local.transform` service in `alfresco` Docker Container and enable `transform` service (asynchronous)
