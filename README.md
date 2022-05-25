@@ -93,6 +93,9 @@ Start ACS Stack from folder containing `docker-compose.yml` file.
 $ docker-compose up --build --force-recreate
 ```
 
+Sample deployment is available in [docker](docker) folder.
+
+
 ### Adding Alfresco OCR Transformer to Docker Compose (Async Transformer - ActiveMQ) - Enterprise Edition
 
 Review that the following configuration is applied to `docker-compose.yml` file.
@@ -138,6 +141,8 @@ Start ACS Stack from folder containing `docker-compose.yml` file.
 ```
 $ docker-compose up --build --force-recreate
 ```
+
+Sample deployment is available in [docker-enterprise](docker-enterprise) folder.
 
 
 ### Defining the OCR Rule in Alfresco Share
