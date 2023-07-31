@@ -8,6 +8,14 @@ The Transformer `ats-transformer-ocr` uses the new Alfresco Local Transform API,
 
 The folder `embed-metadata-action` includes an Alfresco Repository Addon that enables the action `embed-metadata` in Folder Rule feature.
 
+**ACS Community 7.4 or later** requires modifying default configuration for HTTP requests timeouts. Increase default values (5000 ms / 5 s) to a larger value, like in the following sample that uses 500000 ms / 500 s
+
+```
+httpclient.config.transform.socketTimeout=500000
+httpclient.config.transform.connectionRequestTimeout=500000
+httpclient.config.transform.connectionTimeout=500000
+```
+
 ## Local testing
 
 ### Build Docker Image for Alfresco OCR Transformer
