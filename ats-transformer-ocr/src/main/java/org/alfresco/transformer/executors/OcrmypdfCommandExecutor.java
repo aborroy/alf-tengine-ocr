@@ -107,4 +107,18 @@ public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 			Map<String, String> transformOptions, File sourceFile, File targetFile) {
 		transform(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
 	}
+
+	public void transformJpeg(String transformName, String sourceMimetype, String targetMimetype,
+			Map<String, String> transformOptions, File sourceFile, File targetFile) {
+		Long timeout = stringToLong(transformOptions.get(TIMEOUT));
+		String extraArguments = "--image-dpi=96";
+		
+		StringBuilder args = new StringBuilder(arguments);
+		if(extraArguments != null) {
+			args.append(" ").append(extraArguments);
+		}			
+
+		run(args.toString(), sourceFile, targetFile, timeout);
+	}
+
 }

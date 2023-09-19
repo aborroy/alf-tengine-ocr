@@ -95,7 +95,12 @@ public class TransformerController extends AbstractTransformerController {
 		if ("ocrmypdfembedded".equals(transformName)) {
 			ocrmypdfCommandExecutor.embedMetadata(transformName, sourceMimetype, targetMimetype, transformOptions,
 					sourceFile, targetFile);
-		} else {
+		}
+		else if ("ocrmypdfjpeg".equals(transformName)) {
+			ocrmypdfCommandExecutor.transformJpeg(transformName, sourceMimetype, targetMimetype, transformOptions,
+					sourceFile, targetFile);
+		}
+		else {
 			ocrmypdfCommandExecutor.transform(transformName, sourceMimetype, targetMimetype, transformOptions,
 					sourceFile, targetFile);
 		}

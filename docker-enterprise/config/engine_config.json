@@ -19,6 +19,13 @@
           {  "sourceMediaType": "application/pdf", "targetMediaType": "alfresco-metadata-embed" }
 	    ],
 	    "transformOptions": ["embedMetadata"]
+    },
+    {
+      "transformerName": "ocrmypdfjpeg",
+      "supportedSourceAndTargetList": [
+        {"sourceMediaType": "image/jpeg", "targetMediaType": "application/pdf"}
+      ],
+      "transformOptions": []
     }
   ]
 }
