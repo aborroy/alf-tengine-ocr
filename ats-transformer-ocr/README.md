@@ -9,3 +9,20 @@ For instance, to include German, French, Spanish and Italian, use following comm
 ```
 $ docker build . -t alfresco-tengine-ocr --build-arg languages=deu,fra,spa,ita
 ```
+
+If you want to `publish` a Docker Image for multiple architectures use the `buildx` tool:
+
+```
+$ docker buildx build --push -\
+-builder=buildx-multi-arch \
+--platform=linux/amd64,linux/arm64 \
+--build-arg languages=deu,fra,spa,ita \
+--tag=angelborroy/alfresco-tengine-ocr:1.0.0-deu-fra-spa-ita .
+```
+
+Additionally, before building the Docker Image, modify [application.properties](src/main/resources/application.properties) to include languages available:
+
+```
+# Arguments for ocrmypdf invocation
+ocrmypdf.arguments=--skip-text -l eng+deu+fra+spa+ita
+```
