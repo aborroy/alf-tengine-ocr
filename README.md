@@ -8,6 +8,14 @@ The Transformer `ats-transformer-ocr` uses the new Alfresco Local Transform API,
 
 The folder `embed-metadata-action` includes an Alfresco Repository Addon that enables the action `embed-metadata` in Folder Rule feature.
 
+**ACS Community 7.4 or later** requires modifying default configuration for HTTP requests timeouts. Increase default values (5000 ms / 5 s) to a larger value, like in the following sample that uses 500000 ms / 500 s
+
+```
+httpclient.config.transform.socketTimeout=500000
+httpclient.config.transform.connectionRequestTimeout=500000
+httpclient.config.transform.connectionTimeout=500000
+```
+
 ## Local testing
 
 ### Build Docker Image for Alfresco OCR Transformer
@@ -105,7 +113,7 @@ services:
     alfresco:
         environment:
             JAVA_OPTS : "
-              -Dlocal.transform.service.enabled=false
+              -Dlocal.transform.service.enabled=true
               -Dtransform.service.enabled=true
               -Dtransform.service.url=http://transform-router:8095
               -Dsfs.url=http://shared-file-store:8099/
@@ -130,7 +138,7 @@ services:
         FILE_STORE_URL: "http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file"
 ```
 
-* Disable `local.transform` service in `alfresco` Docker Container and enable `transform` service (asynchronous)
+* You can optionally disable `local.transform` service in `alfresco` Docker Container and enable `transform` service (asynchronous). Local Transform Service or Transform Service (supports only asynchronous requests) can be enabled or disabled independently of each other. Please keep in mind that when your deployment has Share and SOLR (think of full text indexing), or both then you'll need to have `local.transform` and `transform` service (asynchronous) enabled and running. The Repository will try to transform content using the Transform Service via the T-Router if possible and fall back to direct Local Transform Service. Share makes use of both, so functionality such as preview will be unavailable if `local.transform` service is disabled.
 * Add OCR Transformer configuration to `transform-router` Docker Container: URL (http://transform-ocr:8090/ by default) and Queue Name (`ocr-engine-queue` as declared in [ats-transformer-ocr/src/main/resources/application-default.yaml](ats-transformer-ocr/src/main/resources/application-default.yaml))
 * Declare the new `transform-ocr` Docker Container using the ActiveMQ and Shared File services
 
