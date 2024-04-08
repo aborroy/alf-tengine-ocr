@@ -8,6 +8,9 @@ ARG IMAGEUSERNAME=alfresco
 # change to root user to be able to install the addons and packages
 USER root
 
+#Disable resource caching
+RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TOMCAT_DIR/conf/context.xml ;
+
 # Install modules and addons
 RUN mkdir -p $TOMCAT_DIR/amps
 COPY modules/amps $TOMCAT_DIR/amps
