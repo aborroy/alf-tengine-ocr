@@ -177,7 +177,7 @@ By default, Alfresco OCR Transformer is providing following `ocrmypdf` configura
 # Executable command for ocrmypdf program
 ocrmypdf.path=ocrmypdf
 
-# Arguments for ocrmypdf invocation. This the optimized option. 
+# Arguments for ocrmypdf invocation. This is the optimized option. 
 # If --skip-text is issued, then no image processing or OCR will be performed on pages that already have text.
 ocrmypdf.arguments=--skip-text
 
