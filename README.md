@@ -133,7 +133,9 @@ services:
       image: alfresco/tengine-ocr:latest
       mem_limit: 1536m
       environment:
-        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80 
+		  -Docrmypdf.path=ocrmypdf -Docrmypdf.arguments=--skip-text -Dqueue.engineRequestQueue=ocr-engine-queue
+		 "
         ACTIVEMQ_URL: "nio://activemq:61616"
         FILE_STORE_URL: "http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file"
 ```
@@ -175,8 +177,12 @@ By default, Alfresco OCR Transformer is providing following `ocrmypdf` configura
 # Executable command for ocrmypdf program
 ocrmypdf.path=ocrmypdf
 
-# Arguments for ocrmypdf invocation
+# Arguments for ocrmypdf invocation. This is the optimized option. 
+# If --skip-text is issued, then no image processing or OCR will be performed on pages that already have text.
 ocrmypdf.arguments=--skip-text
+
+# To force OCR, use the following:
+ocrmypdf.arguments=--force-ocr
 ```   
 
 Configuration can be changed by using Docker environment variables from command line.
@@ -192,7 +198,7 @@ transform-ocr:
     image: alfresco/tengine-ocr:latest
     mem_limit: 1536m
     environment:
-      JAVA_OPTS: "-XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
+      JAVA_OPTS: "-XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80 -Dqueue.engineRequestQueue=ocr-engine-queue"
       OCRMYPDF_ARGUMENTS: "--skip-text -l eng"
 ```
 

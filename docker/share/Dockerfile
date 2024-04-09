@@ -8,7 +8,8 @@ ARG SERVER_NAME
 
 
 
-
+#Disable resource caching
+RUN sed -i "s|<Context>|<Context>\n<Resources cachingAllowed=\"false\"/> |g" $TOMCAT_DIR/conf/context.xml ;
 
 # Install modules and addons
 RUN mkdir -p $TOMCAT_DIR/amps

@@ -1,0 +1,44 @@
+<extension>
+	<modules>
+		<module>
+			<id>OCR share action extension</id>
+			<version>1.0</version>
+			<auto-deploy>true</auto-deploy>
+			<evaluator type="group.module.evaluator">
+				<params>
+					<groups>GROUP_ALFRESCO_ADMINISTRATORS</groups>
+					<relation>OR</relation>
+					<negate>false</negate>
+				</params>
+			</evaluator>
+			<configurations>
+				<config evaluator="string-compare" condition="DocLibActions">
+					<actions>
+						<action id="start-ocr-action" type="javascript" label="start-ocr-action.label" icon="start-ocr-action">
+							<param name="function">onActionSimpleRepoAction</param>
+							<permissions>
+								<permission allow="true">Write</permission>
+							</permissions>
+							<param name="action">embed-metadata</param>
+							<param name="successMessage">start.ocr.action.success</param>
+							<param name="failureMessage">start.ocr.action.failure</param>
+							<evaluator>evaluator.doclib.action.isPDFMimetype</evaluator>
+						</action>
+					</actions>
+					<actionGroups>
+						<actionGroup id="document-browse">
+							<action id="start-ocr-action" index="888">
+								<evaluator>evaluator.doclib.action.isPDFMimetype</evaluator>
+							</action>
+						</actionGroup>
+						<actionGroup id="document-details">
+							<action id="start-ocr-action" index="888">
+								<evaluator>evaluator.doclib.action.isPDFMimetype</evaluator>
+							</action>
+						</actionGroup>
+					</actionGroups>
+				</config>
+			</configurations>
+		</module>
+	</modules>
+</extension>

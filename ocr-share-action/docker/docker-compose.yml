@@ -1,0 +1,72 @@
+version: '3.4'
+services:
+  ocr-share-action-share:
+    image: alfresco-share-ocr-share-action:development
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../../target
+    environment:
+      CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+      REPO_HOST: ${acs.host}
+      REPO_PORT: ${acs.port}
+    ports:
+      - "${share.port}:8080"
+      - "${share.debug.port}:8888"
+# Optional
+#  ocr-share-action-acs:
+#    image: ${docker.acs.image}:${alfresco.platform.version}
+#    environment:
+#      JAVA_OPTS: "
+#                -Ddb.driver=org.postgresql.Driver
+#                -Ddb.username=alfresco
+#                -Ddb.password=alfresco
+#                -Ddb.url=jdbc:postgresql://ocr-share-action-postgres:5432/alfresco
+#                -Dsolr.host=ocr-share-action-ass
+#                -Dsolr.port=8983
+#                -Dsolr.secureComms=none
+#                -Dsolr.base.url=/solr
+#                -Dindex.subsystem.name=solr6
+#                -Dcsrf.filter.enabled=false
+#                -Dmessaging.broker.url=\"vm://localhost?broker.persistent=false\"
+#                -Dtransform.service.enabled=false
+#                -Dlocal.transform.service.enabled=false
+#                -Dlegacy.transform.service.enabled=false
+#                ${keystore.settings}
+#                "
+#    ports:
+#      - "${acs.port}:8080"
+#    volumes:
+#      - ocr-share-action-acs-volume:/usr/local/tomcat/alf_data
+#    depends_on:
+#      - ocr-share-action-postgres
+#  ocr-share-action-postgres:
+#    image: postgres:9.6
+#    environment:
+#      POSTGRES_DB: alfresco
+#      POSTGRES_USER: alfresco
+#      POSTGRES_PASSWORD: alfresco
+#    command: postgres -c max_connections=300 -c log_min_messages=LOG
+#    ports:
+#      - "${postgres.port}:5432"
+#    volumes:
+#      - ocr-share-action-db-volume:/var/lib/postgresql/data
+#  ocr-share-action-ass:
+#    image: alfresco/alfresco-search-services:1.2.0
+#    environment:
+#      SOLR_ALFRESCO_HOST: ocr-share-action-acs
+#      SOLR_ALFRESCO_PORT: 8080
+#      SOLR_SOLR_HOST: ocr-share-action-ass
+#      SOLR_SOLR_PORT: 8983
+#      SOLR_CREATE_ALFRESCO_DEFAULTS: alfresco,archive
+#    ports:
+#      - "8983:8983"
+#    volumes:
+#      - ocr-share-action-ass-volume:/opt/alfresco-search-services/contentstore
+#      - ocr-share-action-ass-volume:/opt/alfresco-search-services/data
+#volumes:
+#  ocr-share-action-acs-volume:
+#    external: true
+#  ocr-share-action-db-volume:
+#    external: true
+#  ocr-share-action-ass-volume:
+#    external: true
