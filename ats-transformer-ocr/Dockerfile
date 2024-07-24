@@ -3,7 +3,7 @@ ARG languages
 
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y ocrmypdf openjdk-11-jdk
+    && apt-get install -y ocrmypdf openjdk-17-jdk
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 ENV JAVA_OPTS=''
