@@ -1,6 +1,12 @@
 ## Alfresco Transformer from PDF to OCRd PDF
 
-Public Docker Images available in https://hub.docker.com/r/angelborroy/alfresco-tengine-ocr/tags
+Public Docker Images available in https://hub.docker.com/r/angelborroy/alfresco-tengine-ocr/tags using following command:
+
+```
+docker buildx build --platform linux/amd64,linux/arm64 --attest type=sbom \
+--attest type=provenance,mode=max -t angelborroy/alfresco-tengine-ocr:1.0.0 . \
+--push
+```
 
 If you want to build a custom docker images with additional languages, use the `build-arg` named `languages`.
 
@@ -14,7 +20,7 @@ If you want to `publish` a Docker Image for multiple architectures use the `buil
 
 ```
 $ docker buildx build --push -\
--builder=buildx-multi-arch \
+--attest type=sbom --attest type=provenance,mode=max \
 --platform=linux/amd64,linux/arm64 \
 --build-arg languages=deu,fra,spa,ita \
 --tag=angelborroy/alfresco-tengine-ocr:1.0.0-deu-fra-spa-ita .

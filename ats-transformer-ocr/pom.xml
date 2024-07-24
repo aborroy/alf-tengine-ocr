@@ -11,11 +11,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.4</version>
+		<version>3.3.2</version>
 	</parent>
 
 	<properties>
-		<alfresco.transformer.base.version>2.5.4</alfresco.transformer.base.version>
+		<alfresco.transformer.base.version>5.1.0</alfresco.transformer.base.version>
 		<image.tag>latest</image.tag>
 	</properties>
 
@@ -44,6 +44,7 @@
 					</execution>
 				</executions>
 			</plugin>
+<!--
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
@@ -65,6 +66,7 @@
 					</execution>
 				</executions>
 			</plugin>
+-->			
 		</plugins>
 	</build>
 
