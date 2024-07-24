@@ -1,2 +1,5 @@
 queue:
   engineRequestQueue: ocr-engine-queue
+transform:
+  core:
+    version: 5.1.3
