@@ -33,20 +33,42 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * The Class OcrmypdfCommandExecutor.
+ */
 @Component
 public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
+	
+	/** The Constant LOGGER. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(OcrmypdfCommandExecutor.class);
+    
+	/** The id. */
 	public static String ID = "ocrmypdf";
+	
+	/** The extra arguments. */
 	public static String EXTRA_ARGUMENTS = "--extra-arguments";
 
+	/** The Constant LICENCE. */
 	public static final String LICENCE = "This transformer uses ocrmypdf which uses the Tesseract library from Google Inc. See the license at https://github.com/tesseract-ocr/tesseract/blob/master/LICENSE";
 
+	/** The exe. */
 	private final String exe;
+	
+	/** The arguments. */
 	private final String arguments;
 
+	/**
+	 * Instantiates a new ocrmypdf command executor.
+	 *
+	 * @param exe the exe
+	 * @param arguments the arguments
+	 */
 	@Autowired
 	public OcrmypdfCommandExecutor(@Value("${ocrmypdf.path}") String exe, @Value("${ocrmypdf.arguments}")  String arguments) {
 		if (exe == null || exe.isEmpty()) {
@@ -58,11 +80,21 @@ public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 		super.checkCommand = createCheckCommand();
 	}
 
+	/**
+	 * Gets the transformer id.
+	 *
+	 * @return the transformer id
+	 */
 	@Override
 	public String getTransformerId() {
 		return ID;
 	}
 
+	/**
+	 * Creates the transform command.
+	 *
+	 * @return the runtime exec
+	 */
 	@Override
 	protected RuntimeExec createTransformCommand() {
 		RuntimeExec runtimeExec = new RuntimeExec();
@@ -79,6 +111,11 @@ public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 		return runtimeExec;
 	}
 
+	/**
+	 * Creates the check command.
+	 *
+	 * @return the runtime exec
+	 */
 	@Override
 	protected RuntimeExec createCheckCommand() {
 		RuntimeExec runtimeExec = new RuntimeExec();
@@ -88,6 +125,16 @@ public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 		return runtimeExec;
 	}
 
+	/**
+	 * Transform.
+	 *
+	 * @param transformName the transform name
+	 * @param sourceMimetype the source mimetype
+	 * @param targetMimetype the target mimetype
+	 * @param transformOptions the transform options
+	 * @param sourceFile the source file
+	 * @param targetFile the target file
+	 */
 	@Override
 	public void transform(String transformName, String sourceMimetype, String targetMimetype,
 			Map<String, String> transformOptions, File sourceFile, File targetFile) {
@@ -102,9 +149,23 @@ public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 		run(args.toString(), sourceFile, targetFile, timeout);
 	}
 	
+	/**
+	 * Embed metadata.
+	 *
+	 * @param transformName the transform name
+	 * @param sourceMimetype the source mimetype
+	 * @param targetMimetype the target mimetype
+	 * @param transformOptions the transform options
+	 * @param sourceFile the source file
+	 * @param targetFile the target file
+	 */
 	@Override
 	public void embedMetadata(String transformName, String sourceMimetype, String targetMimetype,
 			Map<String, String> transformOptions, File sourceFile, File targetFile) {
+		if(LOGGER.isDebugEnabled()) {
+			LOGGER.debug(
+					"Emdedding metadata for sourceMimetype: {} and targetMimetype: {} with transformOptions: {} where transformName is: {}");
+		}
 		transform(transformName, sourceMimetype, targetMimetype, transformOptions, sourceFile, targetFile);
 	}
 }
