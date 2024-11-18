@@ -46,7 +46,7 @@ import org.springframework.stereotype.Component;
 public class OcrmypdfCommandExecutor extends AbstractCommandExecutor {
 	
 	/** The Constant LOGGER. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(OcrmypdfCommandExecutor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OcrmypdfCommandExecutor.class);
     
 	/** The id. */
 	public static String ID = "ocrmypdf";
