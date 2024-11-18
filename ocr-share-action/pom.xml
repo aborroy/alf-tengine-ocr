@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.alfresco</groupId>
     <artifactId>ocr-share-action</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>OCR Share Action Share JAR Module</name>
     <description>OCR Share Action Share JAR Module (to be included in the share.war)</description>
     <packaging>jar</packaging>
@@ -18,8 +18,9 @@
         <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
         <alfresco.bomDependencyArtifactId>acs-community-packaging</alfresco.bomDependencyArtifactId>
-        <alfresco.platform.version>7.0.0</alfresco.platform.version>
-        <alfresco.share.version>7.0.0</alfresco.share.version>
+        <alfresco.platform.version>7.4.0.1</alfresco.platform.version>
+        <alfresco.share.version>20.165</alfresco.share.version>
+        <alfresco.share.docker.version>7.4.0.1</alfresco.share.docker.version>
 
         <!-- Docker images -->
         <docker.acs.image>alfresco/alfresco-content-repository-community</docker.acs.image>

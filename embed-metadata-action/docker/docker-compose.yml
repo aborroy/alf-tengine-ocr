@@ -2,7 +2,7 @@ version: '3.4'
 services:
 #  Optional
 #  embed-metadata-action-share:
-#    image: ${docker.share.image}:${alfresco.share.version}
+#    image: ${docker.share.image}:${alfresco.share.docker.version}
 #    environment:
 #      REPO_HOST: embed-metadata-action-acs
 #      REPO_PORT: 8080

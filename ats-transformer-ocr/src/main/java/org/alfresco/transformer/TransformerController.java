@@ -58,23 +58,44 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class TransformerController extends AbstractTransformerController {
 
+	/** The ocrmypdf command executor. */
 	private final OcrmypdfCommandExecutor ocrmypdfCommandExecutor;
 
+	/**
+	 * Instantiates a new transformer controller.
+	 *
+	 * @param ocrmypdfCommandExecutor the ocrmypdf command executor
+	 */
 	@Autowired
 	public TransformerController(OcrmypdfCommandExecutor ocrmypdfCommandExecutor) {
 		this.ocrmypdfCommandExecutor = ocrmypdfCommandExecutor;
 	}
 
+	/**
+	 * Gets the transformer name.
+	 *
+	 * @return the transformer name
+	 */
 	@Override
 	public String getTransformerName() {
 		return "ocrmypdf";
 	}
 
+	/**
+	 * Version.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String version() {
 		return "1.1";
 	}
 
+	/**
+	 * Gets the probe test transform.
+	 *
+	 * @return the probe test transform
+	 */
 	@Override
 	public ProbeTestTransform getProbeTestTransform() {
 		return new ProbeTestTransform(this, "quick.pdf", "quick2.pdf", 60, 16, 400, 10240, 60 * 30 + 1, 60 * 15 + 20) {
@@ -86,6 +107,16 @@ public class TransformerController extends AbstractTransformerController {
 		};
 	}
 
+	/**
+	 * Transform impl.
+	 *
+	 * @param transformName the transform name
+	 * @param sourceMimetype the source mimetype
+	 * @param targetMimetype the target mimetype
+	 * @param transformOptions the transform options
+	 * @param sourceFile the source file
+	 * @param targetFile the target file
+	 */
 	@Override
 	public void transformImpl(String transformName, String sourceMimetype, String targetMimetype,
 			Map<String, String> transformOptions, File sourceFile, File targetFile) {

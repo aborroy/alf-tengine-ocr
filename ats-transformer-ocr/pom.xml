@@ -4,18 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.alfresco.transform</groupId>
 	<artifactId>ats-transformer-ocr</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>ATS Transformer PDF to OCRd PDF</name>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
+		<version>3.3.5</version>
 	</parent>
 
 	<properties>
-		<alfresco.transformer.base.version>5.1.0</alfresco.transformer.base.version>
+		<alfresco.transformer.base.version>5.1.4</alfresco.transformer.base.version>
 		<image.tag>latest</image.tag>
 	</properties>
 
@@ -44,7 +44,6 @@
 					</execution>
 				</executions>
 			</plugin>
-<!--
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
@@ -65,8 +64,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
--->			
+			</plugin>			
 		</plugins>
 	</build>
 

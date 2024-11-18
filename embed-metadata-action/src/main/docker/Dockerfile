@@ -14,6 +14,7 @@ RUN java -jar $TOMCAT_DIR/alfresco-mmt/alfresco-mmt*.jar install \
 
 COPY alfresco-global.properties $TOMCAT_DIR/shared/classes/alfresco-global.properties
 COPY dev-log4j.properties $TOMCAT_DIR/shared/classes/alfresco/extension
+COPY dev-log4j2.properties $TOMCAT_DIR/shared/classes/alfresco/extension
 COPY disable-webscript-caching-context.xml $TOMCAT_DIR/shared/classes/alfresco/extension
 
 # Copy Dockerfile to avoid an error if no license file exists
