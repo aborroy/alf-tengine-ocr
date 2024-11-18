@@ -79,7 +79,7 @@ services:
       - activemq
 
   transform-ocr:
-    image: alfresco/tengine-ocr:latest
+    image: angelborroy/alfresco-tengine-ocr:${TRANSFORM_OCR_ENGINE_TAG}
     mem_limit: 1536m
     environment:
       JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
