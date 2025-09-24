@@ -40,26 +40,44 @@ import org.springframework.context.event.EventListener;
 
 import io.micrometer.core.instrument.MeterRegistry;
 
+/**
+ * The Class Application.
+ */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class Application {
 	
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    /** The Constant LOGGER. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
+    /** The container name. */
     @Value("${container.name}")
     private String containerName;
 
+    /**
+     * Metrics common tags.
+     *
+     * @return the meter registry customizer
+     */
     @Bean
     MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
         return registry -> registry.config().commonTags("containerName", containerName);
     }
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
+    /**
+     * Startup.
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void startup() {
-        logger.info("Starting application components... Done");
+        LOGGER.info("Starting application components... Done");
     }
 }
