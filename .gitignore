@@ -32,3 +32,6 @@ docker/logs/
 
 docker-enterprise/data/
 docker-enterprise/logs/
+
+# intellij
+.idea/

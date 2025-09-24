@@ -15,7 +15,7 @@
 	</parent>
 
 	<properties>
-		<alfresco.transformer.base.version>5.1.0</alfresco.transformer.base.version>
+		<alfresco.transformer.base.version>5.2.0</alfresco.transformer.base.version>
 		<image.tag>latest</image.tag>
 	</properties>
 
