@@ -204,4 +204,6 @@ transform-ocr:
 
 ## Additional contributors
 
-* Thanks to [dgradecak](https://github.com/dgradecak) for the `embed-metadata` action approach: https://github.com/aborroy/alf-tengine-ocr/pull/2
+* [Daniel Gradecak](https://github.com/dgradecak) for the `embed-metadata` action approach: https://github.com/aborroy/alf-tengine-ocr/pull/2
+
+* [Abhinav mishra](https://github.com/abhinavmishra14) for the `OCR Share Action` action: https://github.com/aborroy/alf-tengine-ocr/pull/18

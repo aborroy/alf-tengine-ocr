@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:26.04
 ARG languages
 
 RUN apt-get update \
